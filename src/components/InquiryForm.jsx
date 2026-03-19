@@ -11,9 +11,7 @@ const InquiryForm = (props) => {
   const [formId, setFormId] = useState();
   const sigCanvasRefs = useRef({});
   const [formFields, setFormFields] = useState();
-  const { organisationId, initialFormId } = props;
-  const apiUrl = import.meta.env.VITE_PUBLIC_API_URL;
-  const prefix = import.meta.env.VITE_PUBLIC_API_PREFIX;
+  const { organisationId, initialFormId, apiUrl, prefix } = props;
   const url = organisationId
     ? `${apiUrl}/${prefix}/forms/${initialFormId}`
     : null;
@@ -26,7 +24,6 @@ const InquiryForm = (props) => {
       setFormId(responseData?.id);
     }
   }, [responseData]);
-console.log("formfields",formFields);
   const onFinish = async (values) => {
     const formData = new FormData();
     let entityId;
@@ -42,13 +39,11 @@ console.log("formfields",formFields);
         }
       }
     });
-    console.log("formData", formData);
     if (values.signature) {
       formData.append("signatureImage", values.signature);
     }
     const formDataObj = {};
     formData.forEach((value, key) => {
-      console.log(value);
       if (formDataObj[key]) {
         if (Array.isArray(formDataObj[key])) {
           formDataObj[key].push(value);
@@ -78,12 +73,10 @@ console.log("formfields",formFields);
         ...(entityId && { entityId }),
         orgId: organisationId ? Number(organisationId) : null,
       };
-      console.log("allvalues", allValues);
       await axios.post(formSubmissionsUrl, allValues, { headers });
       openNotification(`Successfully Added.`);
       form.resetFields();
     } catch (error) {
-      console.error("Failed to submit form:", error);
       openNotification("Error submitting form!", true);
     }
   };
@@ -91,7 +84,7 @@ console.log("formfields",formFields);
     <div style={{ padding: "20px" }}>
       <Form form={form} layout="vertical" onFinish={onFinish}>
         {formFields?.map((field) =>
-          renderFormItem(field, dynamicData, sigCanvasRefs, form)
+          renderFormItem(field, dynamicData, sigCanvasRefs, form),
         )}
         <Form.Item>
           <Button type="primary" htmlType="submit">
