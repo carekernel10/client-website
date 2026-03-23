@@ -55,7 +55,7 @@ const InquiryForm = (props) => {
       }
     });
     try {
-      const inquiriesurl = `${apiUrl}/${prefix}/inquiries`;
+      const inquiriesurl = `${apiUrl}/${prefix}/inquiries?formId=${initialFormId}`;
       const inquiryValues = {
         ...values,
       };
