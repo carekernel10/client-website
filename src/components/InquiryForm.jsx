@@ -4,6 +4,7 @@ import useSWR from "swr";
 import { renderFormItem } from "../service/RenderForm";
 import { fetcher, headers, openNotification } from "../service/constant";
 import axios from "axios";
+import "./InquiryForm.css";
 
 const InquiryForm = (props) => {
   const [form] = Form.useForm();
@@ -11,7 +12,17 @@ const InquiryForm = (props) => {
   const [formId, setFormId] = useState();
   const sigCanvasRefs = useRef({});
   const [formFields, setFormFields] = useState();
-  const { organisationId, initialFormId, apiUrl, prefix } = props;
+  const [formTitle, setFormTitle] = useState("");
+  const [formDescription, setFormDescription] = useState("");
+  const {
+    organisationId,
+    initialFormId,
+    apiUrl,
+    prefix,
+    primaryColor,
+    accentColor,
+    fontFamily,
+  } = props;
   const url = organisationId
     ? `${apiUrl}/${prefix}/forms/${initialFormId}`
     : null;
@@ -22,8 +33,11 @@ const InquiryForm = (props) => {
     if (responseData) {
       setFormFields(responseData?.definition?.fields);
       setFormId(responseData?.id);
+      setFormTitle(responseData?.name || "");
+      setFormDescription(responseData?.description || "");
     }
   }, [responseData]);
+
   const onFinish = async (values) => {
     const formData = new FormData();
     let entityId;
@@ -32,7 +46,6 @@ const InquiryForm = (props) => {
         const val = values[key];
 
         if (Array.isArray(val)) {
-          // Append each array item separately
           val.forEach((item) => formData.append(key, item));
         } else {
           formData.append(key, val);
@@ -80,18 +93,35 @@ const InquiryForm = (props) => {
       openNotification("Error submitting form!", true);
     }
   };
+
+  const themeStyle = {
+    "--ck-primary-color": primaryColor || "#3730a3",
+    "--ck-accent-color": accentColor || "#f97316",
+    "--ck-font-family": fontFamily || "'Inter', -apple-system, sans-serif",
+  };
+
   return (
     <div style={{ padding: "20px" }}>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
-        {formFields?.map((field) =>
-          renderFormItem(field, dynamicData, sigCanvasRefs, form),
-        )}
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+      <div className="ck-inquiry-form" style={themeStyle}>
+        {formTitle && <h2 className="ck-title">{formTitle}</h2>}
+        {formDescription && <p className="ck-description">{formDescription}</p>}
+        <Form form={form} layout="vertical" onFinish={onFinish}>
+          {formFields?.map((field) =>
+            renderFormItem(field, dynamicData, sigCanvasRefs, form),
+          )}
+          <div className="ck-submit-row">
+            <Form.Item>
+              <Button
+                className="ck-submit-btn"
+                type="primary"
+                htmlType="submit"
+              >
+                Submit
+              </Button>
+            </Form.Item>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 };

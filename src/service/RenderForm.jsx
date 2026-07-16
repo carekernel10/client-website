@@ -1,12 +1,111 @@
-import { Button, DatePicker, Form, Input, Select, Switch, Upload } from "antd";
+import {
+  Button,
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Switch,
+  Upload,
+} from "antd";
 import dayjs from "dayjs";
+import { useEffect, useMemo, useState } from "react";
 import SignatureCanvas from "react-signature-canvas";
+
+function generateCaptchaText(length = 5) {
+  // excludes visually ambiguous chars like O/0, I/1, l
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+function LetterCaptchaFormItem({ name, form }) {
+  const [captchaText, setCaptchaText] = useState(() => generateCaptchaText());
+
+  useEffect(() => {
+    if (!form || typeof form.setFieldsValue !== "function") return;
+    const token = btoa(captchaText);
+    form.setFieldsValue({ [`${name}_token`]: token });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form, captchaText]);
+
+  const handleRefresh = () => {
+    const next = generateCaptchaText();
+    setCaptchaText(next);
+    form?.setFieldsValue?.({ [name]: "" });
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        padding: 12,
+        border: "1px solid #d9d9d9",
+        borderRadius: 6,
+        backgroundColor: "#fafafa",
+        maxWidth: 360,
+        flexWrap: "wrap",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          userSelect: "none",
+          backgroundColor: "#eef0f3",
+          padding: "8px 14px",
+          borderRadius: 4,
+          letterSpacing: 4,
+        }}
+      >
+        {captchaText.split("").map((char, i) => (
+          <span
+            key={i}
+            style={{
+              display: "inline-block",
+              fontSize: 20,
+              fontWeight: 700,
+              fontFamily: "monospace",
+              color: `hsl(${(i * 47) % 360}, 55%, 35%)`,
+              transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (8 + i * 3)}deg)`,
+            }}
+          >
+            {char}
+          </span>
+        ))}
+      </div>
+
+      <Button size="small" onClick={handleRefresh} type="text">
+        ⟳ Refresh
+      </Button>
+
+      <Form.Item
+        name={name}
+        noStyle
+        rules={[{ required: true, message: "Please enter the code shown" }]}
+      >
+        <Input
+          style={{ width: 140 }}
+          placeholder="Enter code"
+          autoComplete="off"
+        />
+      </Form.Item>
+      <Form.Item name={`${name}_token`} noStyle>
+        <Input type="hidden" />
+      </Form.Item>
+    </div>
+  );
+}
 
 export const renderFormItem = (
   field,
   dynamicData = [],
   sigCanvasRefs,
-  form
+  form,
 ) => {
   const {
     label,
@@ -45,12 +144,12 @@ export const renderFormItem = (
               label: fullName || "Unnamed",
             }))
           : Array.isArray(options)
-          ? options.map((opt) => ({
-              key: opt || "default-key",
-              value: opt || "default-value",
-              label: opt || "Unnamed",
-            }))
-          : [];
+            ? options.map((opt) => ({
+                key: opt || "default-key",
+                value: opt || "default-value",
+                label: opt || "Unnamed",
+              }))
+            : [];
 
       return (
         <Form.Item {...commonProps}>
@@ -104,6 +203,27 @@ export const renderFormItem = (
           </Select>
         </Form.Item>
       );
+    case "checkboxGroup": {
+      const checkboxOptions = Array.isArray(options)
+        ? options.map((opt) => ({ label: opt, value: opt }))
+        : [];
+
+      return (
+        <Form.Item {...commonProps}>
+          <Checkbox.Group
+            options={checkboxOptions}
+            className="ck-checkbox-grid"
+          />
+        </Form.Item>
+      );
+    }
+    case "captcha": {
+      return (
+        <Form.Item key={name} label={false} shouldUpdate>
+          <LetterCaptchaFormItem name={name} form={form} />
+        </Form.Item>
+      );
+    }
     case "textarea":
       return (
         <Form.Item {...commonProps}>
