@@ -22,6 +22,7 @@ const InquiryForm = (props) => {
     primaryColor,
     accentColor,
     fontFamily,
+    buttonText,
   } = props;
   const url = organisationId
     ? `${apiUrl}/${prefix}/forms/${initialFormId}`
@@ -113,10 +114,10 @@ const InquiryForm = (props) => {
             <Form.Item>
               <Button
                 className="ck-submit-btn"
-                type="primary"
                 htmlType="submit"
+                type="primary"
               >
-                Submit
+                {buttonText}
               </Button>
             </Form.Item>
           </div>

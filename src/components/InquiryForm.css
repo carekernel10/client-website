@@ -1,3 +1,7 @@
+#carekernel-inquiry-widget {
+  color-scheme: light;
+}
+
 .ck-inquiry-form {
   font-family: var(--ck-font-family, "Inter", -apple-system, sans-serif);
   max-width: 480px;
@@ -28,17 +32,39 @@
   color: #374151;
 }
 
+/* Inputs, selects, date pickers - force light background/text so
+   WordPress theme's global input styles can't leak through */
 .ck-inquiry-form .ant-input,
 .ck-inquiry-form .ant-input-affix-wrapper,
 .ck-inquiry-form textarea.ant-input,
 .ck-inquiry-form .ant-select-selector,
-.ck-inquiry-form .ant-picker {
-  border-radius: 8px !important;
-  border-color: #d1d5db !important;
+.ck-inquiry-form .ant-picker,
+.ck-inquiry-form .ant-picker-input > input {
+  border-radius: var(--ck-input-radius, 8px) !important;
+  border: 1px solid #d1d5db !important;
+  background-color: #ffffff !important;
+  color: rgba(0, 0, 0, 0.88) !important;
+}
+
+/* ant-picker-input's inner <input> shouldn't get its own border,
+   the .ant-picker wrapper already has one */
+.ck-inquiry-form .ant-picker-input > input {
+  border: none !important;
 }
 
 .ck-inquiry-form .ant-input {
   padding: 8px 12px !important;
+}
+
+.ck-inquiry-form input::placeholder,
+.ck-inquiry-form textarea::placeholder {
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+.ck-inquiry-form .ant-select-selection-item,
+.ck-inquiry-form .ant-select-selection-placeholder {
+  color: rgba(0, 0, 0, 0.88) !important;
 }
 
 /* Checkbox group layout - fixed 2 columns, generous gap */
@@ -74,7 +100,7 @@
 .ck-checkbox-grid .ant-checkbox .ant-checkbox-inner {
   width: 22px;
   height: 22px;
-  border-radius: 5px;
+  border-radius: var(--ck-checkbox-radius, 5px);
   border-color: #9ca3af;
   flex-shrink: 0;
 }
@@ -93,6 +119,31 @@
   line-height: 1.4;
 }
 
+/* Captcha refresh button - keep it a quiet text link, not a solid
+   button, even if the WordPress theme forces button backgrounds */
+.ck-inquiry-form button {
+  font-family: inherit;
+}
+
+.ck-inquiry-form .ant-btn {
+  box-shadow: none;
+}
+
+.ck-inquiry-form .ant-btn-text {
+  background-color: transparent !important;
+  border: none !important;
+  color: #6b7280 !important;
+  padding: 4px 8px !important;
+  height: auto !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+}
+
+.ck-inquiry-form .ant-btn-text:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  color: #374151 !important;
+}
+
 .ck-submit-row {
   display: flex;
   justify-content: flex-end;
@@ -100,9 +151,10 @@
 }
 
 .ck-submit-btn {
-  border-radius: 999px !important;
+  border-radius: var(--ck-button-radius, 999px) !important;
   background-color: var(--ck-accent-color, #f97316) !important;
   border-color: var(--ck-accent-color, #f97316) !important;
+  color: var(--ck-button-text-color, #ffffff) !important;
   padding: 6px 32px !important;
   height: auto !important;
   font-weight: 600 !important;
