@@ -8,8 +8,8 @@ if (rootEl) {
   const ds = rootEl.dataset;
 
   // Apply theme values as CSS custom properties on the widget root
-  rootEl.style.setProperty("--ck-primary-color", ds.primarycolor || "#3730a3");
-  rootEl.style.setProperty("--ck-accent-color", ds.accentcolor || "#f97316");
+  rootEl.style.setProperty("--ck-primary-color", ds.primarycolor || "#000000");
+  rootEl.style.setProperty("--ck-button-background-color", ds.buttonbackgroundcolor || "#f97316");
   rootEl.style.setProperty(
     "--ck-font-family",
     ds.fontfamily || "'Inter', -apple-system, sans-serif",
@@ -34,7 +34,9 @@ if (rootEl) {
       apiUrl={ds.apiurl}
       prefix={ds.prefix}
       buttonText={ds.buttontext || "Submit"}
-      notificationText={ds.notification || "Our team will get back to you within 24 hours."}
+      notificationText={
+        ds.notification || "Our team will get back to you within 24 hours."
+      }
     />,
   );
 }

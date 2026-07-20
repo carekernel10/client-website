@@ -19,9 +19,6 @@ const InquiryForm = (props) => {
     initialFormId,
     apiUrl,
     prefix,
-    primaryColor,
-    accentColor,
-    fontFamily,
     buttonText,
     notificationText,
   } = props;
@@ -96,15 +93,11 @@ const InquiryForm = (props) => {
     }
   };
 
-  const themeStyle = {
-    "--ck-primary-color": primaryColor || "#3730a3",
-    "--ck-accent-color": accentColor || "#f97316",
-    "--ck-font-family": fontFamily || "'Inter', -apple-system, sans-serif",
-  };
+
 
   return (
     <div style={{ padding: "20px" }}>
-      <div className="ck-inquiry-form" style={themeStyle}>
+      <div className="ck-inquiry-form">
         {formTitle && <h2 className="ck-title">{formTitle}</h2>}
         {formDescription && <p className="ck-description">{formDescription}</p>}
         <Form form={form} layout="vertical" onFinish={onFinish}>

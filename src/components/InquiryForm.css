@@ -11,7 +11,7 @@
 .ck-inquiry-form .ck-title {
   font-size: 26px;
   font-weight: 700;
-  color: var(--ck-primary-color, #3730a3);
+  color: var(--ck-primary-color, #000000);
   line-height: 1.25;
   margin: 0 0 8px 0;
 }
@@ -114,7 +114,6 @@
 /* Label text next to checkbox */
 .ck-checkbox-grid .ant-checkbox + span {
   font-size: 15px;
-  /* color: var(--ck-primary-color, #3730a3); */
   padding-left: 0;
   line-height: 1.4;
 }
@@ -152,8 +151,8 @@
 
 .ck-submit-btn {
   border-radius: var(--ck-button-radius, 999px) !important;
-  background-color: var(--ck-accent-color, #f97316) !important;
-  border-color: var(--ck-accent-color, #f97316) !important;
+  background-color: var(--ck-button-background-color, #f97316) !important;
+  border-color: var(--ck-button-background-color, #f97316) !important;
   color: var(--ck-button-text-color, #ffffff) !important;
   padding: 6px 32px !important;
   height: auto !important;
