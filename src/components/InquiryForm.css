@@ -85,15 +85,14 @@
 /* Each checkbox item fills its grid column so column 2 always
    starts at the same x-position regardless of label length */
 .ck-checkbox-grid .ant-checkbox-wrapper {
-  margin-left: 0 !important;
   display: flex !important;
-  align-items: flex-start !important;
-  gap: 10px;
-  width: 100%;
+  align-items: center !important;
+  gap: 8px;
 }
 
 .ck-checkbox-grid .ant-checkbox {
-  top: 1px;
+  align-self: center;
+  top: 0; /* reset Ant's default translateY tweak if present */
 }
 
 /* Bigger checkbox box */
