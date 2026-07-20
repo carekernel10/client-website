@@ -23,6 +23,7 @@ const InquiryForm = (props) => {
     accentColor,
     fontFamily,
     buttonText,
+    notificationText,
   } = props;
   const url = organisationId
     ? `${apiUrl}/${prefix}/forms/${initialFormId}`
@@ -88,7 +89,7 @@ const InquiryForm = (props) => {
         orgId: organisationId ? Number(organisationId) : null,
       };
       await axios.post(formSubmissionsUrl, allValues, { headers });
-      openNotification(`Successfully Added.`);
+      openNotification(`${notificationText}`, false);
       form.resetFields();
     } catch (error) {
       openNotification("Error submitting form!", true);

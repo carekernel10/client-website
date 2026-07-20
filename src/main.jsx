@@ -34,6 +34,7 @@ if (rootEl) {
       apiUrl={ds.apiurl}
       prefix={ds.prefix}
       buttonText={ds.buttontext || "Submit"}
+      notificationText={ds.notification || "Our team will get back to you within 24 hours."}
     />,
   );
 }
