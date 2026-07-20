@@ -70,6 +70,7 @@ const InquiryForm = (props) => {
       const inquiriesurl = `${apiUrl}/${prefix}/inquiries`;
       const inquiryValues = {
         ...values,
+        formWebsite: true,
       };
       const inquiryResponse = await axios.post(inquiriesurl, inquiryValues, {
         headers,
@@ -92,8 +93,6 @@ const InquiryForm = (props) => {
       openNotification("Error submitting form!", true);
     }
   };
-
-
 
   return (
     <div style={{ padding: "20px" }}>
